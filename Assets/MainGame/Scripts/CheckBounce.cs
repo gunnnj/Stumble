@@ -19,7 +19,7 @@ public class CheckBounce : MonoBehaviour
             player.transform.parent = other.transform;
         }
         if(other.CompareTag("Kill")){
-            Debug.Log("Revive");
+            Debug.Log("Trigger");
             playerRevive.Revive();
         }
         if(other.CompareTag("Bounce")){

@@ -4,6 +4,7 @@ public class PlayerRevive : MonoBehaviour
 {
     private Vector3 positionRevive;
     private CharacterController controller;
+    public bool useKill = false;
 
     void Start()
     {
@@ -15,6 +16,14 @@ public class PlayerRevive : MonoBehaviour
     {
         if(other.CompareTag("Checkpoint")){
             positionRevive = other.transform.position;
+        }
+    }
+    void OnCollisionEnter(Collision other)
+    {
+        if(other.gameObject.CompareTag("Kill")){
+            // if(!useKill) return;
+            Debug.Log("colliion");
+            Revive();
         }
     }
 
