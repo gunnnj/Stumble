@@ -1,3 +1,4 @@
+using System.Threading.Tasks;
 using DiasGames.Controller;
 using DiasGames.Mobile;
 using UnityEngine;
@@ -8,9 +9,12 @@ public class PlayerSp : MonoBehaviour
 {
     public MobileButton buttonJump;
     public CSPlayerController playerController;
-    void Start()
+    async void Start()
     {
         playerController = FindFirstObjectByType<CSPlayerController>();
+        enabled = false;
+        await Task.Delay(100);
+        enabled = true;
     }
 
 

@@ -67,4 +67,7 @@ public class MapReviveUI : MonoBehaviour
     public void Home(){
         SceneManager.LoadScene(0);
     }
+    public void PlayMap(int index){
+        SceneManager.LoadScene(index);
+    }
 }
