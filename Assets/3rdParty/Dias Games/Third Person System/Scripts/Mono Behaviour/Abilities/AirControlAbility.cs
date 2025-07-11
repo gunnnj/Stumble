@@ -11,6 +11,7 @@ namespace DiasGames.Abilities
         [SerializeField] private string animJumpState = "Air.Jump";
         [SerializeField] private string animFallState = "Air.Falling";
         [SerializeField] private string animHardLandState = "Air.Hard Land";
+        
         [Header("Jump parameters")]
         [SerializeField] private float jumpHeight = 1.2f;
         [SerializeField] private float speedOnAir = 6f;
@@ -31,7 +32,6 @@ namespace DiasGames.Abilities
         // [SerializeField] private AudioClip hardLandClip;
         [Header("Event")]
         [SerializeField] private UnityEvent OnLanded = null;
-
         private IMover _mover = null;
         private IDamage _damage;
         private CharacterAudioPlayer _audioPlayer;
@@ -51,6 +51,8 @@ namespace DiasGames.Abilities
         private int jumpcount;
         private GameObject player;
         private bool _isDashing = false;
+        float _timeStart;
+        float _timeToDash;
 
         private void Awake()
         {
@@ -71,12 +73,15 @@ namespace DiasGames.Abilities
             jumpcount = 2;
             _startInput = _action.move;
             _targetRotation = _camera.eulerAngles.y;
+            _timeStart = Time.time;
+            _timeToDash = 0;
 
             if (_action.jump && _mover.IsGrounded())
                 PerformJump();
             else
             {
-                SetAnimationState(animFallState, 0.25f);
+                // SetAnimationState(animFallState, 0.25f);
+                SetAnimationState(animDashState, 0.25f);
                 _startSpeed = Vector3.Scale(_mover.GetVelocity(), new Vector3(1, 0, 1)).magnitude;
 
                 _startInput.x = Vector3.Dot(_camera.right, transform.forward);
@@ -92,8 +97,8 @@ namespace DiasGames.Abilities
 
         public override void UpdateAbility()
         {
-            if (_isDashing) return;
-            CheckDoubleJump();
+            // if (_isDashing) return;
+            // CheckDoubleJump();
             if (_hardLanding)
             {
                 // apply root motion
@@ -101,9 +106,18 @@ namespace DiasGames.Abilities
 
                 // wait animation finish
                 if (HasFinishedAnimation(animHardLandState))
+                
                     StopAbility();
 
                 return;
+            }
+
+            // if(transform.position.y >= heightForHardLand){
+            //     _animator.SetBool(ParamDash,true);
+            // }
+            _timeToDash = Time.time - _timeStart;
+            if(_timeToDash>0.8f){
+                SetAnimationState(animDashState, 0.25f);
             }
 
             if (_mover.IsGrounded())
@@ -111,27 +125,30 @@ namespace DiasGames.Abilities
                 // if(_highestPosition - transform.position.y >= heightForHardLand)
                 // {
                 //     _hardLanding = true;
-                //     SetAnimationState(animHardLandState, 0.02f);
+                //     // SetAnimationState(animHardLandState, 0.02f);
+                //     SetAnimationState(animDashState, 0.02f);
 
                 //     // call event
                 //     OnLanded.Invoke();
 
-                //     // call damage clip
-                //     if(_audioPlayer)
-                //         _audioPlayer.PlayVoice(hardLandClip);
+                // //     // call damage clip
+                // //     if(_audioPlayer)
+                // //         _audioPlayer.PlayVoice(hardLandClip);
 
-                //     // cause damage
-                //     if(_damage != null)
-                //     {
-                //         // calculate damage
-                //         float currentHeight = _highestPosition - transform.position.y - heightForHardLand;
-                //         float ratio = currentHeight / (heightForKillOnLand - heightForHardLand);
+                // //     // cause damage
+                // //     if(_damage != null)
+                // //     {
+                // //         // calculate damage
+                // //         float currentHeight = _highestPosition - transform.position.y - heightForHardLand;
+                // //         float ratio = currentHeight / (heightForKillOnLand - heightForHardLand);
 
-                //         _damage.Damage((int)(200 * ratio));
-                //     }
+                // //         _damage.Damage((int)(200 * ratio));
+                // //     }
 
                 //     return;
                 // }
+
+                // _animator.SetBool(ParamDash,false);
 
                 StopAbility();
             }
@@ -143,6 +160,8 @@ namespace DiasGames.Abilities
             _mover.Move(_startInput, _startSpeed, false);
 
             RotateCharacter();
+
+            
         }
 
         private void RotateCharacter()
@@ -214,10 +233,6 @@ namespace DiasGames.Abilities
                     // if (_audioPlayer)
                     //     _audioPlayer.PlayVoice(jumpEffort); // Có thể thay bằng âm thanh lướt riêng
                 }
-                // Vector3 velocity = _mover.GetVelocity();
-                // velocity.y = Mathf.Sqrt(jumpHeight * -3f * _mover.GetGravity());
-                // _mover.SetVelocity(velocity);
-                // _animator.CrossFadeInFixedTime(animJumpState, 0.1f);
 
             }   
 

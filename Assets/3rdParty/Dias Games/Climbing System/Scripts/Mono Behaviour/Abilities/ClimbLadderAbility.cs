@@ -1,6 +1,8 @@
 using UnityEngine;
 using DiasGames.Components;
 using DiasGames.Climbing;
+using DG.Tweening;
+using UnityEngine.UI;
 
 namespace DiasGames.Abilities
 {
@@ -14,10 +16,23 @@ namespace DiasGames.Abilities
         [SerializeField] private string climbLadderAnimState = "Ladder";
         [SerializeField] private string climbUpAnimState = "Climb.Climb up";
         [SerializeField] private string ladderAnimFloat = "Vertical";
+        [Tooltip("How fast the character climb direction")]
+		[Range(0.0f, 2.5f)]
+        [SerializeField] private float speedAnim = 2f;
         [Header("Movement")]
         [SerializeField] private float climbSpeed = 1.2f;
         [SerializeField] private float charOffset = 0.3f;
         [SerializeField] private float smoothnessTime = 0.12f;
+        [Header("Climb")]
+        [SerializeField] private float energy = 20f;
+        [Header("1 energy = ratio (meter)")]
+        [SerializeField] private float ratio = 1f;
+        [SerializeField] Button buttonAuto;
+
+        private float currentEnergy = 0;
+        private bool autoClimb = false;
+        private float climbSpeedOrigin;
+        private float speedAnimOrigin;
 
         private IMover _mover;
         private ICapsule _capsule;
@@ -35,11 +50,17 @@ namespace DiasGames.Abilities
         private Quaternion _startRotation, _targetRotation;
         private float _step;
         private float _weight;
+        float vertical;
 
         private void Awake()
         {
             _mover = GetComponent<IMover>();
             _capsule = GetComponent<ICapsule>();
+            buttonAuto.onClick.AddListener(()=>AutoClimb(true));
+
+            climbSpeedOrigin = climbSpeed;
+            speedAnimOrigin = speedAnim;
+            
         }
 
         public override bool ReadyToRun()
@@ -64,6 +85,8 @@ namespace DiasGames.Abilities
             _stopDown = false;
             _stopUp = false;
             _climbingUp = false;
+
+            speedAnim = speedAnimOrigin;
         }
 
         public override void UpdateAbility()
@@ -89,7 +112,31 @@ namespace DiasGames.Abilities
             }
 
             // vertical parameter to move
-            float vertical = _action.move.y;
+            // float vertical = _action.move.y;
+
+            //_Add only vertical_up
+            
+            if(_action.move.y>0){
+                vertical = _action.move.y;
+            }else vertical = 0;
+
+            if(autoClimb){
+                vertical = 1;
+            }
+
+
+            //Update energy
+            currentEnergy = energy - transform.position.y/ratio;
+            speedAnim = currentEnergy/(energy/speedAnimOrigin)+0.1f;
+            climbSpeed = 0.9f*speedAnim+0.1f;
+            if(currentEnergy<0){
+                speedAnim = 0;
+                climbSpeed = 0;
+            }
+
+            //Update speed anim
+
+            _animator.speed = speedAnim;
 
             // check limits
             CheckVerticalLimits();
@@ -100,7 +147,7 @@ namespace DiasGames.Abilities
             // check if reach top limit
             if (_stopUp && vertical > 0)
             {
-                Debug.Log("Upppppp");
+                
                 // climb up
                 if (_currentLadder.CanClimbTop)
                 {
@@ -114,6 +161,7 @@ namespace DiasGames.Abilities
                 // stop up climbing on ladder after reach top
                 vertical = 0;
             }
+            
 
             // set climb ladder animation float
             _animator.SetFloat(ladderAnimFloat, vertical, 0.1f, Time.deltaTime);
@@ -122,11 +170,13 @@ namespace DiasGames.Abilities
 
             // if climbing down and find ground, finish ability
             if (_action.move.y < 0f && _mover.IsGrounded())
+
                 StopAbility();
 
             // drop from ladder
             if (_action.drop)
             {
+
                 StopAbility();
                 BlockLadder();
             }
@@ -134,6 +184,9 @@ namespace DiasGames.Abilities
 
         public override void OnStopAbility()
         {
+            AutoClimb(false);
+            _animator.speed = 1;
+            climbSpeed = climbSpeedOrigin;
             _mover.EnableGravity();
             _capsule.EnableCollision();
             _mover.StopRootMotion();
@@ -148,6 +201,10 @@ namespace DiasGames.Abilities
             _mover.SetPosition(Vector3.Lerp(_startPosition, _targetPosition, _weight));
             transform.rotation = Quaternion.Lerp(_startRotation, _targetRotation, _weight);
         }
+        public void AutoClimb(bool value){
+            autoClimb = value;
+        }
+
 
         /// <summary>
         /// Block current ladder when dropping
