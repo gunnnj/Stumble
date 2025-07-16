@@ -9,7 +9,7 @@ namespace DiasGames.Abilities
     {
         [Header("Animation State")]
         [SerializeField] private string animJumpState = "Air.Jump";
-        [SerializeField] private string animFallState = "Air.Falling";
+        // [SerializeField] private string animFallState = "Air.Falling";
         [SerializeField] private string animHardLandState = "Air.Hard Land";
         
         [Header("Jump parameters")]
@@ -23,6 +23,7 @@ namespace DiasGames.Abilities
         [SerializeField] private float dashDistance = 2f; // Khoảng cách lướt
         [SerializeField] private float dashSpeed = 10f;   // Tốc độ lướt
         [SerializeField] private string animDashState = "Air.Dash"; // Tên state hoạt hình cho lướt (nếu có)
+        [SerializeField] UIClimb uIClimb;
 
         [Header("Landing")]
         // [SerializeField] private float heightForHardLand = 3f;
@@ -82,13 +83,15 @@ namespace DiasGames.Abilities
             {
                 // SetAnimationState(animFallState, 0.25f);
                 SetAnimationState(animDashState, 0.25f);
+                
                 _startSpeed = Vector3.Scale(_mover.GetVelocity(), new Vector3(1, 0, 1)).magnitude;
 
                 _startInput.x = Vector3.Dot(_camera.right, transform.forward);
                 _startInput.y = Vector3.Dot(Vector3.Scale(_camera.forward, new Vector3(1, 0, 1)), transform.forward);
 
-                if (_startSpeed > 3.5f)
-                    _startSpeed = speedOnAir;
+                // if (_startSpeed > 3.5f)
+                //     _startSpeed = speedOnAir;
+                _startSpeed = speedOnAir;
             }
 
             _highestPosition = transform.position.y;
@@ -181,6 +184,7 @@ namespace DiasGames.Abilities
         public override void OnStopAbility()
         {
             base.OnStopAbility();
+            uIClimb?.SetActiveGoldText(false);
 
             if (_mover.IsGrounded() && !_hardLanding && _mover.GetVelocity().y < -3f)
                 OnLanded.Invoke();

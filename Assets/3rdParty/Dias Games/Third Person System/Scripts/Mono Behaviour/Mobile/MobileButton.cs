@@ -12,7 +12,7 @@ namespace DiasGames.Mobile
             Jump, Roll, Crouch, Crawl, Zoom, Interact, Drop, Pause, Slip
         }
 
-        [SerializeField] private InputButton Button = InputButton.Jump;
+        [SerializeField] public InputButton Button = InputButton.Jump;
         [SerializeField] public GameObject player;
         [Space]
         [SerializeField] private Image m_TargetGraphic = null;

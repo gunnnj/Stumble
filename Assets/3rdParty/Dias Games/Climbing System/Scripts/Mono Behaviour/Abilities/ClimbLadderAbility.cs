@@ -3,6 +3,7 @@ using DiasGames.Components;
 using DiasGames.Climbing;
 using DG.Tweening;
 using UnityEngine.UI;
+using System;
 
 namespace DiasGames.Abilities
 {
@@ -20,17 +21,20 @@ namespace DiasGames.Abilities
 		[Range(0.0f, 2.5f)]
         [SerializeField] private float speedAnim = 2f;
         [Header("Movement")]
-        [SerializeField] private float climbSpeed = 1.2f;
+        [SerializeField] public float climbSpeed = 1.2f;
         [SerializeField] private float charOffset = 0.3f;
         [SerializeField] private float smoothnessTime = 0.12f;
         [Header("Climb")]
-        [SerializeField] private float energy = 20f;
+        [SerializeField] ListWing listWing = null;
+        [SerializeField] public float energy = 20f;
+        [SerializeField] public float originEnergy = 20f;
         [Header("1 energy = ratio (meter)")]
         [SerializeField] private float ratio = 1f;
         [SerializeField] Button buttonAuto;
+        [SerializeField] UIClimb uIClimb;
 
         private float currentEnergy = 0;
-        private bool autoClimb = false;
+        [HideInInspector] public bool autoClimb = false;
         private float climbSpeedOrigin;
         private float speedAnimOrigin;
 
@@ -50,7 +54,7 @@ namespace DiasGames.Abilities
         private Quaternion _startRotation, _targetRotation;
         private float _step;
         private float _weight;
-        float vertical;
+        [HideInInspector] public float vertical;
 
         private void Awake()
         {
@@ -60,7 +64,25 @@ namespace DiasGames.Abilities
 
             climbSpeedOrigin = climbSpeed;
             speedAnimOrigin = speedAnim;
+            energy = originEnergy;
             
+        }
+
+        void OnEnable()
+        {
+            EventShopWing.pickSkin += BuffEnergy;
+        }
+
+
+        void OnDisable()
+        {
+            EventShopWing.pickSkin -= BuffEnergy;
+        }
+        private void BuffEnergy(int id)
+        {
+            float buff = listWing.skins[id].buffSpeed;
+            energy = originEnergy + buff;
+            Debug.Log("Buff: "+listWing.skins[id].buffSpeed);
         }
 
         public override bool ReadyToRun()
@@ -70,6 +92,7 @@ namespace DiasGames.Abilities
 
         public override void OnStartAbility()
         {
+            uIClimb?.SetActiveGoldText(true);
             _animator.CrossFadeInFixedTime(climbLadderAnimState, 0.1f);
             _mover.DisableGravity();
 
@@ -128,7 +151,7 @@ namespace DiasGames.Abilities
             //Update energy
             currentEnergy = energy - transform.position.y/ratio;
             speedAnim = currentEnergy/(energy/speedAnimOrigin)+0.1f;
-            climbSpeed = 0.9f*speedAnim+0.1f;
+            climbSpeed = climbSpeedOrigin*speedAnim+0.1f;
             if(currentEnergy<0){
                 speedAnim = 0;
                 climbSpeed = 0;

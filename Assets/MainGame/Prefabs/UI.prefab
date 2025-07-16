@@ -112,7 +112,7 @@ RectTransform:
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 0}
@@ -191,13 +191,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: debfef07d4dd77f4597689a982bac4eb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  arrow: {fileID: 3505667874173565999}
-  minRectY: -250.25
-  maxRectY: 262.2
   minPosY: 1.33
   maxPosY: 40.33
   player: {fileID: 0}
   slider: {fileID: 4135655359885514558}
+  txtGoldGet: {fileID: 0}
+  txtTotalGold: {fileID: 0}
+  ratio: 100
+  oldG: 0
+  totalGold: 0
+  g: 0
 --- !u!1 &1519106799653148392
 GameObject:
   m_ObjectHideFlags: 0

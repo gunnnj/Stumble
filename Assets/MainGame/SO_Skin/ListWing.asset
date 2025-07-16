@@ -1,0 +1,45 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d05a7cfdf8357484fbcf072bc403c4ee, type: 3}
+  m_Name: ListWing
+  m_EditorClassIdentifier: 
+  skins:
+  - prefab: {fileID: 9009470594550113923, guid: 51d4a90a22de29b4fb706bf254493376, type: 3}
+    image: {fileID: 21300000, guid: fb474e2d064e11a48be7d7220351534b, type: 3}
+    price: 100
+    isPurchased: 0
+    buffSpeed: 4
+    name: Angel  Wing
+  - prefab: {fileID: 9196884836810151341, guid: ff8ae7f1f50866a4fbdca1a934bd2e1f, type: 3}
+    image: {fileID: 21300000, guid: 5b802016e3fc2944ea3a448f05e12e08, type: 3}
+    price: 200
+    isPurchased: 0
+    buffSpeed: 6
+    name: Angel White Wing
+  - prefab: {fileID: 8736305044953770768, guid: 77ed067d56ba48743a21068349c29b7e, type: 3}
+    image: {fileID: 21300000, guid: 4fcf67166f58e2c48b73b67ccd9ca7bd, type: 3}
+    price: 300
+    isPurchased: 0
+    buffSpeed: 8
+    name: 'Butter Wing '
+  - prefab: {fileID: 5926022436811095606, guid: 5be354102d203b64d99eb58ed674b376, type: 3}
+    image: {fileID: 21300000, guid: 2e9607d7229659746a21c3d43ee83664, type: 3}
+    price: 400
+    isPurchased: 0
+    buffSpeed: 10
+    name: Butter Wing Green
+  - prefab: {fileID: 2009005606525058192, guid: e8757f06ffa655142b0d05284a8e3ceb, type: 3}
+    image: {fileID: 21300000, guid: e79911a2af756f547a4fd97fbf06793c, type: 3}
+    price: 500
+    isPurchased: 0
+    buffSpeed: 12
+    name: Butter Wing Pink
