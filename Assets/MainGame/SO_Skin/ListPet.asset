@@ -17,29 +17,29 @@ MonoBehaviour:
     image: {fileID: 0}
     price: 1000
     isPurchased: 0
-    buffGold: 0
+    buffGold: 30
     name: Bat
   - prefab: {fileID: 8718252290463616753, guid: cda449a39bfde664e9346282f0bed619, type: 3}
     image: {fileID: 0}
     price: 2000
     isPurchased: 0
-    buffGold: 0
+    buffGold: 50
     name: Skullcap
   - prefab: {fileID: 4769356311976245418, guid: 95e76973032b7484ba6d169a7b90e7ae, type: 3}
     image: {fileID: 0}
     price: 3000
     isPurchased: 0
-    buffGold: 0
+    buffGold: 60
     name: Golden
   - prefab: {fileID: 7028833039246566894, guid: c02c7be7965749e41b7df8f3552acf2a, type: 3}
     image: {fileID: 0}
     price: 4000
     isPurchased: 0
-    buffGold: 0
+    buffGold: 70
     name: Sheep
   - prefab: {fileID: 8784957656283409315, guid: 34c683f663efe4a41b6c89d894a40023, type: 3}
     image: {fileID: 0}
     price: 5000
     isPurchased: 0
-    buffGold: 0
+    buffGold: 80
     name: Dragon

@@ -24,6 +24,12 @@ namespace DiasGames.Mobile
         [SerializeField] private RectTransform m_HandleStickRect = null;
         [SerializeField] private FloatingJoystick floatingJoystick;
 
+        Vector2 currentLocalPoint;
+        Vector2 initialLocalPoint;
+        Vector2 old;
+        float x;
+        float y;
+
         protected void Awake()
         {
             m_Canvas = GetComponentInParent<Canvas>();
@@ -44,17 +50,30 @@ namespace DiasGames.Mobile
 
         private void Update()
         {
-            float x = Mathf.Clamp(targetPoint.x, -1, 1) * (InvertX ? -1 : 1);
-            float y;
-            // float y = Mathf.Clamp(targetPoint.y, -1, 1) * (InvertY ? 1 : -1); //Update rotation Y reverse
+            x = Mathf.Clamp(targetPoint.x, -1, 1) * (InvertX ? -1 : 1);
 
             if (IsCameraJoystick){
-                y = Mathf.Clamp(targetPoint.y, -1, 1) * (InvertY ? 1 : -1);
-                player.SendMessage("OnLook", new Vector2(x, y));
+                if(old!=currentLocalPoint){
+                    y = Mathf.Clamp(targetPoint.y, -1, 1) * (InvertY ? 1 : -1);
+                    player.SendMessage("OnLook", new Vector2(x, y));
+                    // if(old.x>currentLocalPoint.x){
+                    //     Debug.Log(">");
+                    // }
+                    // else{
+                    //     Debug.Log("<");
+                    // }
+                    old = currentLocalPoint;
+                    
+                }
+                else{
+                    player.SendMessage("OnLook", new Vector2(0, 0));
+                    initialLocalPoint = currentLocalPoint;
+                    
+                }
+                    
                 
             }
             else{
-                // y = Mathf.Clamp(targetPoint.y, -1, 1) * (InvertY ? -1 : 1);
                 x = floatingJoystick.Horizontal;
                 y = floatingJoystick.Vertical;
                 player.SendMessage("OnMove", new Vector2(x, y));
@@ -79,26 +98,12 @@ namespace DiasGames.Mobile
             Vector2 localPoint;
             RectTransformUtility.ScreenPointToLocalPointInRectangle(m_BackgroundRect, eventData.position, cam, out localPoint);
             m_HandleStickRect.anchoredPosition = localPoint / m_Canvas.scaleFactor;
+
+            
         }
 
         public void OnDrag(PointerEventData eventData)
         {
-            //Origin code
-            // Camera cam = null;
-            // if (m_Canvas.renderMode == RenderMode.ScreenSpaceCamera)
-            //     cam = m_Canvas.worldCamera;
-
-            // Vector2 position = RectTransformUtility.WorldToScreenPoint(cam, m_BackgroundRect.position);
-            // Vector2 radius = m_BackgroundRect.sizeDelta / 2;
-
-            // targetPoint = (eventData.position - position) / (radius * m_Canvas.scaleFactor);
-
-            // if (targetPoint.magnitude > 1)
-            //     targetPoint.Normalize();
-
-            // m_HandleStickRect.anchoredPosition = targetPoint * radius * m_MoveRange;
-
-
 
             Camera cam = null;
             if (m_Canvas.renderMode == RenderMode.ScreenSpaceCamera)
@@ -106,21 +111,22 @@ namespace DiasGames.Mobile
 
             Vector2 radius = m_BackgroundRect.sizeDelta / 2;
 
-            // Tính targetPoint dựa trên vị trí chạm ban đầu
+            
             targetPoint = (eventData.position - initialTouchPosition) / (radius * m_Canvas.scaleFactor);
 
             if (targetPoint.magnitude > 1)
                 targetPoint.Normalize();
 
-            // Tính vị trí m_HandleStickRect dựa trên điểm kéo, tương đối với initialTouchPosition
-            Vector2 currentLocalPoint;
+    
             RectTransformUtility.ScreenPointToLocalPointInRectangle(m_BackgroundRect, eventData.position, cam, out currentLocalPoint);
-            Vector2 initialLocalPoint;
+            // currentLocalPoint = eventData.position;
+
             RectTransformUtility.ScreenPointToLocalPointInRectangle(m_BackgroundRect, initialTouchPosition, cam, out initialLocalPoint);
             Vector2 offset = (currentLocalPoint - initialLocalPoint) / m_Canvas.scaleFactor;
             if (offset.magnitude > m_MoveRange)
                 offset = offset.normalized * m_MoveRange;
             m_HandleStickRect.anchoredPosition = (initialLocalPoint / m_Canvas.scaleFactor) + offset;
+            
         }
 
         public void OnPointerUp(PointerEventData eventData)

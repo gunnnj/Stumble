@@ -19,7 +19,9 @@ public class DetailPet : MonoBehaviour
         txtName.text = LoadDataPet.Instance.GetName(id);
         imgSkin.sprite = LoadDataPet.Instance.GetSprite(id);
         txtPrice.text = LoadDataPet.Instance.GetPrice(id).ToString();
-        buffGold.text = "x"+LoadDataPet.Instance.GetBuffGold(id).ToString();
+        buffGold.text = "x"+LoadDataPet.Instance.GetBuffGold(id).ToString()+ "%";
+
+        UIClimb.Instance.buffGold = LoadDataPet.Instance.GetBuffGold(id);
     }
     //Add button buy
     public void Buy(){

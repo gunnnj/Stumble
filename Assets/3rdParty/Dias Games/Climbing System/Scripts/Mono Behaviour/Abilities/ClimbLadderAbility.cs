@@ -18,7 +18,7 @@ namespace DiasGames.Abilities
         [SerializeField] private string climbUpAnimState = "Climb.Climb up";
         [SerializeField] private string ladderAnimFloat = "Vertical";
         [Tooltip("How fast the character climb direction")]
-		[Range(0.0f, 2.5f)]
+		[Range(0.0f, 3f)]
         [SerializeField] private float speedAnim = 2f;
         [Header("Movement")]
         [SerializeField] public float climbSpeed = 1.2f;
@@ -151,8 +151,8 @@ namespace DiasGames.Abilities
             //Update energy
             currentEnergy = energy - transform.position.y/ratio;
             speedAnim = currentEnergy/(energy/speedAnimOrigin)+0.1f;
-            climbSpeed = climbSpeedOrigin*speedAnim+0.1f;
-            if(currentEnergy<0){
+            climbSpeed = climbSpeedOrigin*speedAnim+0.3f;
+            if(currentEnergy<=0){
                 speedAnim = 0;
                 climbSpeed = 0;
             }
@@ -200,8 +200,11 @@ namespace DiasGames.Abilities
             if (_action.drop)
             {
 
+
                 StopAbility();
                 BlockLadder();
+
+                
             }
         }
 

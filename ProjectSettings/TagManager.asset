@@ -13,6 +13,7 @@ TagManager:
   - Win
   - Checkpoint
   - Parent
+  - Shop
   layers:
   - Default
   - TransparentFX

@@ -6,11 +6,8 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/MainGame/Scene/ScenePlayTest.unity
-    guid: c2269ecacca9cd5479b2d133a027607d
-  - enabled: 1
-    path: Assets/MainGame/Scene/ScenePlayMap.unity
-    guid: 580763e289ca33246a2f92b3bc5f8968
+    path: Assets/MainGame/Scene/Jump.unity
+    guid: 7fce1a572035cc44284043d114d54a50
   m_configObjects:
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 052faaac586de48259a63d0c4782560b, type: 3}
   m_UseUCBPForAssetBundles: 0

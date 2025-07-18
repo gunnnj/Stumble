@@ -3,16 +3,16 @@ using UnityEngine;
 
 public class FollowParent : MonoBehaviour
 {
-    public CharacterController controller;
-    public Transform parent;
-    [SerializeField] float speed = 1f;
-    public bool isStartTarget = false;
-    Vector3 lastPosition;
+    // public CharacterController controller;
+    // public Transform parent;
+    // [SerializeField] float speed = 1f;
+    // public bool isStartTarget = false;
+    // Vector3 lastPosition;
 
-    void Start()
-    {
-        controller = GetComponent<CharacterController>();
-    }
+    // void Start()
+    // {
+    //     controller = GetComponent<CharacterController>();
+    // }
 
     void Update()
     {

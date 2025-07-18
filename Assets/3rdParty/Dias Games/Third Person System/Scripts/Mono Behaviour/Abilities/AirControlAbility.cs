@@ -82,6 +82,14 @@ namespace DiasGames.Abilities
             else
             {
                 // SetAnimationState(animFallState, 0.25f);
+                Quaternion quaternion = Quaternion.LookRotation(new Vector3(0, 0, 1));
+                transform.rotation = quaternion;
+                // transform.eulerAngles = new Vector3(0,180,0);
+
+                Vector3 dashDirection = transform.forward;
+                // Vector3 dashDirection = new Vector3(0, 0, 1);
+                _mover.Move(dashDirection * 10f);
+
                 SetAnimationState(animDashState, 0.25f);
                 
                 _startSpeed = Vector3.Scale(_mover.GetVelocity(), new Vector3(1, 0, 1)).magnitude;
@@ -89,9 +97,9 @@ namespace DiasGames.Abilities
                 _startInput.x = Vector3.Dot(_camera.right, transform.forward);
                 _startInput.y = Vector3.Dot(Vector3.Scale(_camera.forward, new Vector3(1, 0, 1)), transform.forward);
 
-                // if (_startSpeed > 3.5f)
-                //     _startSpeed = speedOnAir;
-                _startSpeed = speedOnAir;
+                if (_startSpeed > 3.5f)
+                    _startSpeed = speedOnAir;
+                // _startSpeed = speedOnAir;
             }
 
             _highestPosition = transform.position.y;

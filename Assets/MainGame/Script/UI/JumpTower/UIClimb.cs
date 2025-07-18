@@ -20,11 +20,18 @@ public class UIClimb : MonoBehaviour
     [SerializeField] TMP_Text txtTotalGold;
     [Header("1 meter = ratio (coin)")]
     [SerializeField] float ratio = 100f;
+    [SerializeField] public float buffGold = 30f;
     public bool isResetGold = false;
 
     public float oldG;
     public float totalGold;
     public float g;
+    public static UIClimb Instance;
+
+    void Awake()
+    {
+        Instance = this;
+    }
 
     void OnEnable()
     {
@@ -72,7 +79,8 @@ public class UIClimb : MonoBehaviour
             sliderIcon.value = 0;
             txtGoldGet.text = "0";
             if(oldG>1){
-                totalGold += oldG*ratio;
+                totalGold += oldG*ratio*(1+buffGold/100);
+                Debug.Log("Add "+ oldG*ratio*(1+buffGold/100) + " gold");
 
                 PlayerPrefs.SetInt(ConstString.TotalGold,(int)totalGold);
 
