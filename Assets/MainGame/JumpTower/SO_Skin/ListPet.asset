@@ -12,34 +12,41 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 11797f03f8bc5ed49ad1f059cb54413f, type: 3}
   m_Name: ListPet
   m_EditorClassIdentifier: 
+  listEquip: ffffffffffffffffffffffff
+  listHas: 
   pets:
   - prefab: {fileID: 1505139642472312845, guid: 519aa3dcc0937d64fa00448a730534d5, type: 3}
-    image: {fileID: 0}
-    price: 1000
-    isPurchased: 0
-    buffGold: 30
+    image: {fileID: 21300000, guid: 2a1f3cba20f3e11498474a705db12fde, type: 3}
+    equiped: 0
+    hasPet: 0
+    buffGold: 1.5
     name: Bat
+    typeEgg: 0
   - prefab: {fileID: 8718252290463616753, guid: cda449a39bfde664e9346282f0bed619, type: 3}
-    image: {fileID: 0}
-    price: 2000
-    isPurchased: 0
-    buffGold: 50
+    image: {fileID: 21300000, guid: 48c0d4d6bebaa934384b07aa1e2f8184, type: 3}
+    equiped: 0
+    hasPet: 0
+    buffGold: 2
     name: Skullcap
+    typeEgg: 1
   - prefab: {fileID: 4769356311976245418, guid: 95e76973032b7484ba6d169a7b90e7ae, type: 3}
-    image: {fileID: 0}
-    price: 3000
-    isPurchased: 0
-    buffGold: 60
+    image: {fileID: 21300000, guid: 54628aafa20f64b40ae661038ee7abf0, type: 3}
+    equiped: 0
+    hasPet: 0
+    buffGold: 3
     name: Golden
+    typeEgg: 2
   - prefab: {fileID: 7028833039246566894, guid: c02c7be7965749e41b7df8f3552acf2a, type: 3}
-    image: {fileID: 0}
-    price: 4000
-    isPurchased: 0
-    buffGold: 70
+    image: {fileID: 4354952550296478604, guid: 3d98b1a625122b44185f7f70fdd7f506, type: 3}
+    equiped: 0
+    hasPet: 0
+    buffGold: 5
     name: Sheep
+    typeEgg: 3
   - prefab: {fileID: 8784957656283409315, guid: 34c683f663efe4a41b6c89d894a40023, type: 3}
-    image: {fileID: 0}
-    price: 5000
-    isPurchased: 0
-    buffGold: 80
+    image: {fileID: -8139733110256863280, guid: 3d98b1a625122b44185f7f70fdd7f506, type: 3}
+    equiped: 0
+    hasPet: 0
+    buffGold: 11
     name: Dragon
+    typeEgg: 4

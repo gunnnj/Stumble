@@ -50,7 +50,6 @@ namespace DiasGames.Abilities
         private float _highestPosition = 0;
         private bool _hardLanding = false;
         private int jumpcount;
-        private GameObject player;
         private bool _isDashing = false;
         float _timeStart;
         float _timeToDash;
@@ -61,7 +60,6 @@ namespace DiasGames.Abilities
             _damage = GetComponent<IDamage>();
             _audioPlayer = GetComponent<CharacterAudioPlayer>();
             _camera = Camera.main.transform;
-            player = GameObject.FindGameObjectWithTag("Player");
         }
 
         public override bool ReadyToRun()

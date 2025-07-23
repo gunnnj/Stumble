@@ -20,7 +20,7 @@ public class UIClimb : MonoBehaviour
     [SerializeField] TMP_Text txtTotalGold;
     [Header("1 meter = ratio (coin)")]
     [SerializeField] float ratio = 100f;
-    [SerializeField] public float buffGold = 30f;
+    [SerializeField] public float buffGold = 1.5f;
     public bool isResetGold = false;
 
     public float oldG;
@@ -35,19 +35,16 @@ public class UIClimb : MonoBehaviour
 
     void OnEnable()
     {
-        EventShopWing.buySkin += BuySkin;
+        // EventShopWing.buySkin += BuySkin;
     }
 
     void OnDisable()
     {
-        EventShopWing.buySkin -= BuySkin;
+        // EventShopWing.buySkin -= BuySkin;
     }
 
     void Start()
     {
-        // arrow.rectTransform.DOAnchorPosY(maxPositionY, 2f);
-        // minRectY = arrow.rectTransform.position.y;
-        // rectX = arrow.rectTransform.position.x;
         btnOpenShopWing.onClick.AddListener(OpenShopWing);
         btnOpenShopPet.onClick.AddListener(OpenShopPet);
 
@@ -59,8 +56,17 @@ public class UIClimb : MonoBehaviour
         }
 
         totalGold = PlayerPrefs.GetInt(ConstString.TotalGold,0);
-        float goldtext = totalGold/ 1000;
-        txtTotalGold.text = goldtext.ToString("F2")+"K";
+
+        // if(totalGold>1000){
+        //     float goldtext = totalGold / 1000;
+        //     txtTotalGold.text = goldtext.ToString("F2")+"K";
+        // }
+        // else{
+        //     txtTotalGold.text = totalGold.ToString("F0");
+        // }
+
+        txtTotalGold.text = Formatter.FormatMoney(totalGold);
+
 
         
     }
@@ -79,20 +85,26 @@ public class UIClimb : MonoBehaviour
             sliderIcon.value = 0;
             txtGoldGet.text = "0";
             if(oldG>1){
-                totalGold += oldG*ratio*(1+buffGold/100);
-                Debug.Log("Add "+ oldG*ratio*(1+buffGold/100) + " gold");
+                totalGold += oldG*ratio*buffGold;
+                Debug.Log("Add "+ oldG*ratio*buffGold + " gold");
 
                 PlayerPrefs.SetInt(ConstString.TotalGold,(int)totalGold);
 
-                float goldtext = totalGold / 1000;
-                txtTotalGold.text = goldtext.ToString("F2")+"K";
+                PlayerPrefs.Save();
+
+                txtTotalGold.text = Formatter.FormatMoney(totalGold);
+                // if(totalGold>1000){
+                //     float goldtext = totalGold / 1000;
+                //     txtTotalGold.text = goldtext.ToString("F2")+"K";
+                // }
+                // else{
+                //     txtTotalGold.text = totalGold.ToString("F0");
+                // }
+                
             }
             
             oldG = 0;
         }
-        
-        // // Cập nhật vị trí của arrow (chỉ thay đổi Y, giữ nguyên X và Z)
-        // arrow.rectTransform.position = new Vector3(rectX, rectY, 0);
 
         UpdateGoldText(playerY);
     }
@@ -104,19 +116,20 @@ public class UIClimb : MonoBehaviour
             if (g > oldG)
             {
                 // Tính số vàng tương ứng
-                float gold = g * ratio;
+                float gold = g * ratio * buffGold;
 
                 // Hiển thị số vàng
-                if (gold >= 1000)
-                {
-                    gold /= 1000;
-                    txtGoldGet.text = gold.ToString("F2") + "K"; 
-                }
-                else
-                {
-                    txtGoldGet.text = gold.ToString("F0"); 
-                }
+                // if (gold >= 1000)
+                // {
+                //     gold /= 1000;
+                //     txtGoldGet.text = gold.ToString("F2") + "K"; 
+                // }
+                // else
+                // {
+                //     txtGoldGet.text = gold.ToString("F0"); 
+                // }
 
+                txtGoldGet.text = Formatter.FormatMoney(gold);
 
                 oldG = g;
             }
@@ -133,24 +146,23 @@ public class UIClimb : MonoBehaviour
     private void OpenShopPet(){
         ShopPet.SetActive(true);
     }
-    private void BuySkin(int id)
+    public void BuySkin(int id)
     {
         int price = LoadDataWing.Instance.GetPrice(id);
-        if(totalGold<price) {
-            Debug.Log("K đủ tiền!");
-            return;
-        }
-        if(LoadDataWing.Instance.GetPurchased(id)){
-            Debug.Log("Skin đã được mua!");
-            return;
-        }
         totalGold -= price;
 
         PlayerPrefs.SetInt(ConstString.TotalGold,(int)totalGold);
+        PlayerPrefs.Save();
 
-        float goldtext = totalGold / 1000;
-        txtTotalGold.text = goldtext.ToString("F2")+"K";
+        txtTotalGold.text = Formatter.FormatMoney(totalGold);
 
         LoadDataWing.Instance.SetPurchased(id);
+    }
+    public void MinusTotalGold(int value){
+        totalGold -= value;
+        PlayerPrefs.SetInt(ConstString.TotalGold,(int)totalGold);
+        PlayerPrefs.Save();
+        txtTotalGold.text = Formatter.FormatMoney(totalGold);
+
     }
 }

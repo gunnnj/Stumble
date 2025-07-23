@@ -25,13 +25,13 @@ namespace DiasGames.Abilities
         [SerializeField] private float charOffset = 0.3f;
         [SerializeField] private float smoothnessTime = 0.12f;
         [Header("Climb")]
-        [SerializeField] ListWing listWing = null;
         [SerializeField] public float energy = 20f;
         [SerializeField] public float originEnergy = 20f;
         [Header("1 energy = ratio (meter)")]
         [SerializeField] private float ratio = 1f;
         [SerializeField] Button buttonAuto;
         [SerializeField] UIClimb uIClimb;
+        public bool useEnergy=false;
 
         private float currentEnergy = 0;
         [HideInInspector] public bool autoClimb = false;
@@ -60,29 +60,31 @@ namespace DiasGames.Abilities
         {
             _mover = GetComponent<IMover>();
             _capsule = GetComponent<ICapsule>();
-            buttonAuto.onClick.AddListener(()=>AutoClimb(true));
-
+            if(useEnergy){
+                buttonAuto?.onClick.AddListener(()=>AutoClimb(true));
+            }
             climbSpeedOrigin = climbSpeed;
             speedAnimOrigin = speedAnim;
             energy = originEnergy;
             
+            
         }
-
         void OnEnable()
         {
             EventShopWing.pickSkin += BuffEnergy;
         }
-
-
         void OnDisable()
         {
             EventShopWing.pickSkin -= BuffEnergy;
         }
         private void BuffEnergy(int id)
         {
-            float buff = listWing.skins[id].buffSpeed;
-            energy = originEnergy + buff;
-            Debug.Log("Buff: "+listWing.skins[id].buffSpeed);
+            if(LoadDataWing.Instance.GetPurchased(id)){
+                float buff = LoadDataWing.Instance.GetBuffSpeed(id);
+                energy = originEnergy + buff;
+                Debug.Log("Buff: "+LoadDataWing.Instance.GetBuffSpeed(id));
+            }
+            
         }
 
         public override bool ReadyToRun()
@@ -134,28 +136,33 @@ namespace DiasGames.Abilities
                 return;
             }
 
-            // vertical parameter to move
-            // float vertical = _action.move.y;
+            
 
             //_Add only vertical_up
-            
-            if(_action.move.y>0){
+            if(useEnergy){
+                if(_action.move.y>0){
+                    vertical = _action.move.y;
+                }else vertical = 0;
+
+                if(autoClimb){
+                    vertical = 1;
+                }
+
+
+                //Update energy
+                currentEnergy = energy - transform.position.y/ratio;
+                speedAnim = currentEnergy/(energy/speedAnimOrigin)+0.1f;
+                climbSpeed = climbSpeedOrigin*speedAnim+0.3f;
+                if(currentEnergy<=0){
+                    speedAnim = 0;
+                    climbSpeed = 0;
+                }
+            }
+            else{
+                // vertical parameter to move
                 vertical = _action.move.y;
-            }else vertical = 0;
-
-            if(autoClimb){
-                vertical = 1;
             }
-
-
-            //Update energy
-            currentEnergy = energy - transform.position.y/ratio;
-            speedAnim = currentEnergy/(energy/speedAnimOrigin)+0.1f;
-            climbSpeed = climbSpeedOrigin*speedAnim+0.3f;
-            if(currentEnergy<=0){
-                speedAnim = 0;
-                climbSpeed = 0;
-            }
+            
 
             //Update speed anim
 
@@ -199,12 +206,8 @@ namespace DiasGames.Abilities
             // drop from ladder
             if (_action.drop)
             {
-
-
                 StopAbility();
                 BlockLadder();
-
-                
             }
         }
 

@@ -2,24 +2,24 @@ using UnityEngine;
 
 public class ShopZone : MonoBehaviour
 {
-    [SerializeField] GameObject btnShop;
+    [SerializeField] GameObject go;
 
     void Start()
     {
-        btnShop.SetActive(false);
+        // btnShop.SetActive(false);
     }
     void OnTriggerEnter(Collider other)
     {
         if(other.CompareTag("Player")){
-            Debug.Log("OpenShop");
-            btnShop.SetActive(true);
+
+            go.SetActive(true);
         }
     }
     void OnTriggerExit(Collider other)
     {
         if(other.CompareTag("Player")){
-            Debug.Log("Close");
-            btnShop.SetActive(false);
+
+            go.SetActive(false);
         }
     }
 }

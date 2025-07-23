@@ -8,6 +8,9 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/MainGame/Scene/Jump.unity
     guid: 7fce1a572035cc44284043d114d54a50
+  - enabled: 1
+    path: Assets/MainGame/Scene/Jump 1.unity
+    guid: cc3ca40e7716fe7459c1d16e1aa246c3
   m_configObjects:
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 052faaac586de48259a63d0c4782560b, type: 3}
   m_UseUCBPForAssetBundles: 0
