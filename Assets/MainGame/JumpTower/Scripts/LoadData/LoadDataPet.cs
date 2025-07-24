@@ -22,16 +22,18 @@ public class LoadDataPet : MonoBehaviour
     public bool GetHasPet(int id){
         return skinPets.pets[id].hasPet;
     }
+    //Tương tự lấy bằng list (chưa dùng)
     public void SetHasPet(int id){
         skinPets.pets[id].hasPet = true;
     }
-    //Pet đã equip chưa?
+    //Pet đã equip chưa? (bỏ)
     public bool GetEquiped(int id){
         return skinPets.pets[id].equiped;
     }
     public bool SetEquiped(int id, bool value){
         return skinPets.pets[id].equiped = value;
     }
+    //
     public float GetBuffGold(int id){
         return skinPets.pets[id].buffGold;
     }
@@ -56,16 +58,29 @@ public class LoadDataPet : MonoBehaviour
     public void AddHasPet(int idPet){
         skinPets.AddListHas(idPet);
     }
-    //Lấy chỉ số skin equiped
-    public int GetIDPetEquip(int value){
+    //Lấy thứ tự của listHas skin equiped
+    public int GetValueByIDEquip(int value){
         return skinPets.listEquip[value];
     }
     public List<int> GetListEquip(){
         return skinPets.listEquip;
     }
+    //Set chỉ số của list equip là thứ tự của list đã có
+    public void SetValueByIDListEquip(int id, int value){
+        skinPets.listEquip[id] = value;
+    }
     //Lấy chỉ số list pet
-    public int GetIDPetInListHas(int value){
-        return skinPets.listHas[value];
+    public int GetValueByIDListHas(int id){
+        return skinPets.listHas[id];
+    }
+    //Lấy chỉ số bằng giá trị của List E
+    public int GetIDByValueListEquip(int value){
+        for(int i=0; i<skinPets.listEquip.Count;i++){
+            if(skinPets.listEquip[i]==value){
+                return i;
+            }
+        }
+        return -1;
     }
     public List<int> GetListHas(){
         return skinPets.listHas;

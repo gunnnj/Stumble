@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -12,6 +13,7 @@ public class ShopEggs : MonoBehaviour
     [SerializeField] GameObject HatchEgg;
     [SerializeField] Image imgPetHatch;
     [SerializeField] List<int> idPetEgg;
+    [SerializeField] TMP_Text txtType;
 
     void Start()
     {
@@ -38,6 +40,7 @@ public class ShopEggs : MonoBehaviour
         int type = RandomEgg.RandomWithRaito(45,28,16,8);
         Debug.Log("Egg type: "+type);
         imgPetHatch.sprite =  LoadDataPet.Instance.GetSprite(idPetEgg[type]);
+        txtType.text = LoadDataPet.Instance.GetTypeEgg(idPetEgg[type]).ToString();
         LoadDataPet.Instance.AddHasPet(idPetEgg[type]);
         BagPets.Instance.SpawnAddItemPet();
         HatchEgg.SetActive(true);

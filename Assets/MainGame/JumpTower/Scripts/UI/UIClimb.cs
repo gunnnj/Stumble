@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -20,7 +21,8 @@ public class UIClimb : MonoBehaviour
     [SerializeField] TMP_Text txtTotalGold;
     [Header("1 meter = ratio (coin)")]
     [SerializeField] float ratio = 100f;
-    [SerializeField] public float buffGold = 1.5f;
+    public float buffGold = 1f;
+    public float sumBuff = 0;
     public bool isResetGold = false;
 
     public float oldG;
@@ -31,16 +33,6 @@ public class UIClimb : MonoBehaviour
     void Awake()
     {
         Instance = this;
-    }
-
-    void OnEnable()
-    {
-        // EventShopWing.buySkin += BuySkin;
-    }
-
-    void OnDisable()
-    {
-        // EventShopWing.buySkin -= BuySkin;
     }
 
     void Start()
@@ -57,17 +49,10 @@ public class UIClimb : MonoBehaviour
 
         totalGold = PlayerPrefs.GetInt(ConstString.TotalGold,0);
 
-        // if(totalGold>1000){
-        //     float goldtext = totalGold / 1000;
-        //     txtTotalGold.text = goldtext.ToString("F2")+"K";
-        // }
-        // else{
-        //     txtTotalGold.text = totalGold.ToString("F0");
-        // }
 
         txtTotalGold.text = Formatter.FormatMoney(totalGold);
 
-
+        UpdateBuffGold();
         
     }
 
@@ -75,7 +60,6 @@ public class UIClimb : MonoBehaviour
     {
         float playerY = player.position.y;
 
-        // rectY = minRectY - (playerY/(maxPosY-minPosY))*(maxRectY-minRectY); 
         if(playerY>=minPosY){
             slider.value = playerY/(maxPosY-minPosY);
             sliderIcon.value = playerY/(maxPosY-minPosY);
@@ -85,6 +69,14 @@ public class UIClimb : MonoBehaviour
             sliderIcon.value = 0;
             txtGoldGet.text = "0";
             if(oldG>1){
+
+                if(sumBuff>0){
+                    totalGold += oldG*ratio*sumBuff;
+                }
+                else{
+                    totalGold += oldG*ratio*buffGold;
+                }
+
                 totalGold += oldG*ratio*buffGold;
                 Debug.Log("Add "+ oldG*ratio*buffGold + " gold");
 
@@ -93,13 +85,6 @@ public class UIClimb : MonoBehaviour
                 PlayerPrefs.Save();
 
                 txtTotalGold.text = Formatter.FormatMoney(totalGold);
-                // if(totalGold>1000){
-                //     float goldtext = totalGold / 1000;
-                //     txtTotalGold.text = goldtext.ToString("F2")+"K";
-                // }
-                // else{
-                //     txtTotalGold.text = totalGold.ToString("F0");
-                // }
                 
             }
             
@@ -115,19 +100,14 @@ public class UIClimb : MonoBehaviour
             meter.text = g+" m";
             if (g > oldG)
             {
+                float gold;
                 // Tính số vàng tương ứng
-                float gold = g * ratio * buffGold;
-
-                // Hiển thị số vàng
-                // if (gold >= 1000)
-                // {
-                //     gold /= 1000;
-                //     txtGoldGet.text = gold.ToString("F2") + "K"; 
-                // }
-                // else
-                // {
-                //     txtGoldGet.text = gold.ToString("F0"); 
-                // }
+                if(sumBuff>0){
+                    gold = g * ratio * sumBuff;
+                }
+                else{
+                    gold = g * ratio * buffGold;
+                }
 
                 txtGoldGet.text = Formatter.FormatMoney(gold);
 
@@ -164,5 +144,18 @@ public class UIClimb : MonoBehaviour
         PlayerPrefs.Save();
         txtTotalGold.text = Formatter.FormatMoney(totalGold);
 
+    }
+    public void UpdateBuffGold(){
+        sumBuff = 0;
+        List<int> listE = LoadDataPet.Instance.GetListEquip();
+        foreach(var item in listE){
+            if(item>=0){
+                
+                int idSkin = LoadDataPet.Instance.GetValueByIDListHas(item);
+                Debug.Log(idSkin);
+                sumBuff += LoadDataPet.Instance.GetBuffGold(idSkin);
+                Debug.Log(sumBuff);
+            }    
+        }
     }
 }

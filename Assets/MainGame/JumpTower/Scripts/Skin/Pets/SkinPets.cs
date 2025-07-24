@@ -3,6 +3,7 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "ListWing", menuName = "DataSkin/ListPet")]
 public class SkinPets : ScriptableObject
 {
+    //List thứ tự trong listHas
     public List<int> listEquip;
     public List<int> listHas;
     public List<Pet> pets;
